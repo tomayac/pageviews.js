@@ -1,0 +1,25 @@
+{
+  "name": "pageviews",
+  "version": "1.0.0",
+  "description": "JavaScript client library for the Wikimedia Pageview API for Wikipedia and its sister projects.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node tests.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tomayac/pageviews.js.git"
+  },
+  "keywords": [
+    "pageview",
+    "pageviews",
+    "wikipedia",
+    "wikimedia",
+    "api"
+  ],
+  "author": "Thomas Steiner <steiner.thomas@gmail.com> (http://blog.tomayac.com/)",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "request": "^2.67.0"
+  }
+}
