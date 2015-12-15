@@ -1,10 +1,12 @@
 {
   "name": "pageviews",
   "version": "1.0.0",
-  "description": "JavaScript client library for the Wikimedia Pageview API for Wikipedia and its sister projects.",
+  "description": "A lightweight JavaScript client library for the Wikimedia Pageviews API for Wikipedia and various of its sister projects for Node.js and the browser.",
   "main": "pageviews.js",
   "scripts": {
-    "test": "node tests.js"
+    "test": "node tests/tests.js",
+    "lint": "jshint pageviews.js tests/tests.js; jscs --preset=google pageviews.js tests/tests.js",
+    "build": "uglifyjs pageviews.js --compress sequences,properties,dead_code,conditionals,comparisons,evaluate,booleans,loops,unused,if_return,join_vars,warnings --mangle --comments --output pageviews.min.js"
   },
   "repository": {
     "type": "git",
@@ -18,6 +20,9 @@
     "api"
   ],
   "author": "Thomas Steiner <steiner.thomas@gmail.com> (http://blog.tomayac.com/)",
+  "bugs": {
+    "url": "https://github.com/tomayac/pageviews.js/issues"
+  },
   "license": "Apache-2.0",
   "dependencies": {
     "request": "^2.67.0"

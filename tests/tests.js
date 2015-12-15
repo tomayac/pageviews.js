@@ -1,4 +1,5 @@
-var pageviews = require('./pageviews.js');
+var pageviews = typeof window === 'undefined' ?
+    require('../pageviews.js') : pageviews;
 
 pageviews.getPageviewsDimensions().then(function(result) {
   console.log(JSON.stringify(result, null, 2));

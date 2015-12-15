@@ -1,4 +1,5 @@
 /**
+ * @license
  * Copyright 2015 Thomas Steiner (@tomayac). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,20 +15,38 @@
  * limitations under the License.
  */
 
-var request = require('request');
-var package = require('./package.json');
+var request;
 
-// Enable or disable debug mode
-var DEBUG = false;
+var USER_AGENT = 'pageviews.js';
 
-// The Pageviews base URL
-var BASE_URL = 'https://wikimedia.org/api/rest_v1';
-
-// The user agent to use
-var USER_AGENT = 'pageviews.js–v' + package.version + ' (' +
-    package.repository.url + ')';
+// Dynamically adapt to the runtime environment
+var environment = typeof window === 'undefined' ? 'node' : 'browser';
+if (environment === 'node') {
+  // Node.js
+  request = require('request');
+  var package = require('./package.json');
+  // The user agent to use
+  USER_AGENT = 'pageviews.js–v' + package.version + ' (' +
+      package.repository.url + ')';
+} else {
+  // Browser
+  request = function(options, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.addEventListener('load', function() {
+      return callback(null, {statusCode: this.status}, this.responseText);
+    });
+    xhr.addEventListener('error', function(e) {
+      return callback(e);
+    });
+    xhr.open('GET', options.url);
+    xhr.send();
+  };
+}
 
 var pageviews = (function() {
+  // The Pageviews base URL
+  var BASE_URL = 'https://wikimedia.org/api/rest_v1';
+
   var _access = {
     default: 'all-access',
     allowed: ['all-access', 'desktop', 'mobile-web', 'mobile-app']
@@ -222,7 +241,6 @@ var pageviews = (function() {
           'User-Agent': USER_AGENT
         }
       };
-      DEBUG && console.log(JSON.stringify(options, null, 2));
       request(options, function(error, response, body) {
         var result = _checkResult(error, response, body);
         if (result.stack) {
@@ -271,7 +289,6 @@ var pageviews = (function() {
           'User-Agent': USER_AGENT
         }
       };
-      DEBUG && console.log(JSON.stringify(options, null, 2));
       request(options, function(error, response, body) {
         var result = _checkResult(error, response, body);
         if (result.stack) {
@@ -318,7 +335,6 @@ var pageviews = (function() {
           'User-Agent': USER_AGENT
         }
       };
-      DEBUG && console.log(JSON.stringify(options, null, 2));
       request(options, function(error, response, body) {
         var result = _checkResult(error, response, body);
         if (result.stack) {
@@ -340,7 +356,6 @@ var pageviews = (function() {
           'User-Agent': USER_AGENT
         }
       };
-      DEBUG && console.log(JSON.stringify(options, null, 2));
       request(options, function(error, response, body) {
         var result = _checkResult(error, response, body);
         if (result.stack) {
@@ -382,4 +397,6 @@ var pageviews = (function() {
   };
 })();
 
-module.exports = pageviews;
+if (environment === 'node') {
+  module.exports = pageviews;
+}
