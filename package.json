@@ -2,7 +2,7 @@
   "name": "pageviews",
   "version": "1.0.0",
   "description": "JavaScript client library for the Wikimedia Pageview API for Wikipedia and its sister projects.",
-  "main": "index.js",
+  "main": "pageviews.js",
   "scripts": {
     "test": "node tests.js"
   },
