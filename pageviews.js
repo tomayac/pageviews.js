@@ -137,11 +137,11 @@ var pageviews = (function() {
         return new Error('Required parameter "year" missing or invalid.');
       }
       // Required: month
-      if ((!params.month) || (!/^(?:0[1-9]|1[012])$/.test(params.month))) {
+      if ((!params.month) || (!/^(?:0?[1-9]|1[012])$/.test(params.month))) {
         return new Error('Required parameter "month" missing or invalid.');
       }
       // Required: day
-      if ((!params.day) || (!/^(?:0[1-9]|[12][0-9]|3[01])$/.test(params.day))) {
+      if ((!params.day) || (!/^(?:0?[1-9]|[12][0-9]|3[01])$/.test(params.day))) {
         return new Error('Required parameter "day" missing or invalid.');
       }
       if ((params.limit) && !/^\d+$/.test(params.limit) &&
@@ -319,8 +319,10 @@ var pageviews = (function() {
       // Required params
       var project = params.project;
       var year = params.year;
-      var month = params.month;
-      var day = params.day;
+      var month = typeof params.month === 'number' && params.month < 10 ?
+          '0' + params.month : params.month;
+      var day = typeof params.day === 'number' && params.day < 10 ?
+          '0' + params.day : params.day;
       var limit = params.limit || false;
       // Optional params
       var access = params.access ? params.access : _access.default;

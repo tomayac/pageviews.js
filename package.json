@@ -1,6 +1,6 @@
 {
   "name": "pageviews",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A lightweight JavaScript client library for the Wikimedia Pageviews API for Wikipedia and various of its sister projects for Node.js and the browser.",
   "main": "pageviews.js",
   "scripts": {

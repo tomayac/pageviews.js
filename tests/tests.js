@@ -72,3 +72,27 @@ pageviews.getTopPageviews({
 }).catch(function(error) {
   console.log(error);
 });
+
+pageviews.getTopPageviews({
+  project: 'en.wikipedia',
+  year: 2015,
+  month: 12,
+  day: 1,
+  limit: 2
+}).then(function(result) {
+  console.log(JSON.stringify(result, null, 2));
+}).catch(function(error) {
+  console.log(error);
+});
+
+pageviews.getTopPageviews({
+  project: 'en.wikipedia',
+  year: 2015,
+  month: 9,
+  day: 30,
+  limit: 2
+}).then(function(result) {
+  console.log(JSON.stringify(result, null, 2));
+}).catch(function(error) {
+  console.log(error);
+});
