@@ -79,8 +79,8 @@ pageviews.getTopPageviews({
 pageviews.getTopPageviews({
   projects: ['en.wikipedia', 'de.wikipedia'], // Plural
   year: '2015',
-  month: '12',
-  day: '01',
+  month: '12', // Can also use integers like 12
+  day: '01', // Can also use integers like 1
   limit: 2 // Limit to the first n results
 }).then(function(result) {
   console.log(JSON.stringify(result, null, 2));
