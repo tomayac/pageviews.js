@@ -1,11 +1,19 @@
 # pageviews.js
 
-A lightweight JavaScript client library for the [Wikimedia Pageviews API](https://wikimedia.org/api/rest_v1/?doc#!/Pageviews_data) for Wikipedia and various of its sister projects for Node.js and the browser.
+A lightweight JavaScript client library for the [Wikimedia Pageviews API](https://wikimedia.org/api/rest_v1/?doc#!/Pageviews_data) for Wikipedia and various of its sister projects for **Node.js** and the **browser**.
 
 # Installation
 
+With npm:
+
 ```bash
 $ npm install pageviews
+```
+
+With bower:
+
+```bash
+$ bower install pageviews
 ```
 
 # Usage in Node.js
@@ -153,7 +161,7 @@ getTopPageviews
 ```
 
 # License
-Copyright 2015 Thomas Steiner (@tomayac)
+Copyright 2016 Thomas Steiner (@tomayac)
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
