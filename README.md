@@ -28,8 +28,8 @@ var pageviews = require('pageviews');
 pageviews.getPerArticlePageviews({
   article: 'Berlin',
   project: 'en.wikipedia',
-  start: '20151201',
-  end: '20151202'
+  start: '20151201', // YYYYMMDD string or Date object
+  end: '20151202' // YYYYMMDD string or Date object
 }).then(function(result) {
   console.log(JSON.stringify(result, null, 2));
 }).catch(function(error) {
@@ -40,8 +40,8 @@ pageviews.getPerArticlePageviews({
 pageviews.getPerArticlePageviews({
   articles: ['Berlin', 'Hamburg'], // Plural
   project: 'en.wikipedia',
-  start: '20151201',
-  end: '20151202'
+  start: '20151201',  // YYYYMMDD string or Date object
+  end: '20151202' // YYYYMMDD string or Date object
 }).then(function(result) {
   console.log(JSON.stringify(result, null, 2));
 }).catch(function(error) {
@@ -51,8 +51,8 @@ pageviews.getPerArticlePageviews({
 // Getting aggregated pageviews for a single project
 pageviews.getAggregatedPageviews({
   project: 'en.wikipedia',
-  start: '2015120101',
-  end: '2015120102'
+  start: '2015120101', // YYYYMMDDHH string or Date object
+  end: '2015120102' // YYYYMMDDHH string or Date object
 }).then(function(result) {
   console.log(JSON.stringify(result, null, 2));
 }).catch(function(error) {
@@ -62,8 +62,8 @@ pageviews.getAggregatedPageviews({
 // Getting aggregated pageviews for multiple projects
 pageviews.getAggregatedPageviews({
   projects: ['en.wikipedia', 'de.wikipedia'], // Plural
-  start: '2015120101',
-  end: '2015120101'
+  start: '2015120101', // YYYYMMDDHH string or Date object
+  end: '2015120101' // YYYYMMDDHH string or Date object
 }).then(function(result) {
   console.log(JSON.stringify(result, null, 2));
 }).catch(function(error) {
@@ -95,6 +95,18 @@ pageviews.getTopPageviews({
 }).catch(function(error) {
   console.log(error);
 });
+
+// Getting top-n items ranked by pageviews for multiple projects
+pageviews.getTopPageviews({
+  projects: ['en.wikipedia', 'de.wikipedia'], // Plural
+  date: '20150101', // YYYYMMDD string or Date object
+  limit: 2 // Limit to the first n results
+}).then(function(result) {
+  console.log(JSON.stringify(result, null, 2));
+}).catch(function(error) {
+  console.log(error);
+});
+
 ```
 
 # Usage in the browser
@@ -114,8 +126,8 @@ You can then use the file in the browser as follows.
   pageviews.getPerArticlePageviews({
     article: 'Berlin',
     project: 'en.wikipedia',
-    start: '20151201',
-    end: '20151202'
+    start: '20151201', // YYYYMMDD string or Date object
+    end: '20151202' // YYYYMMDD string or Date object
   }).then(function(result) {
     console.log(JSON.stringify(result, null, 2));
   }).catch(function(error) {
