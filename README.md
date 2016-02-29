@@ -28,8 +28,8 @@ var pageviews = require('pageviews');
 pageviews.getPerArticlePageviews({
   article: 'Berlin',
   project: 'en.wikipedia',
-  start: '20151201', // YYYYMMDD string or Date object
-  end: '20151202' // YYYYMMDD string or Date object
+  start: new Date(new Date() - 3 * 24 * 60 * 60 * 1000), // YYYYMMDD string or Date object
+  end: new Date(new Date() - 2 * 24 * 60 * 60 * 1000) // YYYYMMDD string or Date object
 }).then(function(result) {
   console.log(JSON.stringify(result, null, 2));
 }).catch(function(error) {
@@ -40,8 +40,8 @@ pageviews.getPerArticlePageviews({
 pageviews.getPerArticlePageviews({
   articles: ['Berlin', 'Hamburg'], // Plural
   project: 'en.wikipedia',
-  start: '20151201',  // YYYYMMDD string or Date object
-  end: '20151202' // YYYYMMDD string or Date object
+  start: new Date(new Date() - 3 * 24 * 60 * 60 * 1000),  // YYYYMMDD string or Date object
+  end: new Date(new Date() - 2 * 24 * 60 * 60 * 1000) // YYYYMMDD string or Date object
 }).then(function(result) {
   console.log(JSON.stringify(result, null, 2));
 }).catch(function(error) {
@@ -99,14 +99,13 @@ pageviews.getTopPageviews({
 // Getting top-n items ranked by pageviews for multiple projects
 pageviews.getTopPageviews({
   projects: ['en.wikipedia', 'de.wikipedia'], // Plural
-  date: '20150101', // YYYYMMDD string or Date object
+  date: new Date(new Date() - 2 * 24 * 60 * 60 * 1000), // YYYYMMDD string or Date object
   limit: 2 // Limit to the first n results
 }).then(function(result) {
   console.log(JSON.stringify(result, null, 2));
 }).catch(function(error) {
   console.log(error);
 });
-
 ```
 
 # Usage in the browser
@@ -126,8 +125,8 @@ You can then use the file in the browser as follows.
   pageviews.getPerArticlePageviews({
     article: 'Berlin',
     project: 'en.wikipedia',
-    start: '20151201', // YYYYMMDD string or Date object
-    end: '20151202' // YYYYMMDD string or Date object
+    start: new Date(new Date() - 3 * 24 * 60 * 60 * 1000), // YYYYMMDD string or Date object
+    end: new Date(new Date() - 2 * 24 * 60 * 60 * 1000) // YYYYMMDD string or Date object
   }).then(function(result) {
     console.log(JSON.stringify(result, null, 2));
   }).catch(function(error) {
