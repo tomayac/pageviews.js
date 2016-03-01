@@ -87,7 +87,7 @@ var pageviews = (function() {
         return new Error('Required parameter "project" missing.');
       }
     }
-    if ((params.project) && (params.project.indexOf('.') === -1)) {
+    if ((params.project) && ((params.project.indexOf('.') === -1 && params.project !== 'all-projects') ) {
       return new Error('Required parameter "project" invalid.');
     }
     if ((caller === 'getAggregatedPageviews') ||
