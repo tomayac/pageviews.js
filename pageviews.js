@@ -87,15 +87,18 @@ var pageviews = (function() {
         return new Error('Required parameter "project" missing.');
       }
     }
-    if ((params.project) && (params.project.indexOf('.') === -1)) {
-      return new Error('Required parameter "project" invalid.');
+    if (params.project) {
+      if ((params.project !== 'all-projects') &&
+          (params.project.indexOf('.') === -1)) {
+        return new Error('Required parameter "project" invalid.');
+      }
     }
     if ((caller === 'getAggregatedPageviews') ||
         (caller === 'getTopPageviews')) {
-      if (params.projects) {
+      if (params.projects && params.projects != 'all-projects') {
         if ((!Array.isArray(params.projects)) || (!params.projects.length) ||
             (params.projects.filter(function(project) {
-              return project.indexOf('.') === -1;
+              return project.indexOf('.') === -1 && project !== 'all-projects';
             }).length)
         ) {
           return new Error('Required parameter "projects" invalid.');
@@ -296,6 +299,10 @@ var pageviews = (function() {
       params = _checkParams(params, 'getAggregatedPageviews');
       if (params.stack) {
         return reject(params);
+      }
+      if (params.projects === 'all-projects') {
+        params.projects = null;
+        params.project = 'all-projects';
       }
       // Call yourself recursively in case of multiple projects
       if (params.projects) {

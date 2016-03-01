@@ -123,6 +123,39 @@ describe('pageviews.js', function() {
     });
   });
 
+  it('Returns aggregated pageviews for all projects (plural, date object).',
+      function() {
+    return pageviews.getAggregatedPageviews({
+      projects: 'all-projects',
+      start: new Date(new Date() - 3 * 24 * 60 * 60 * 1000),
+      end: new Date(new Date() - 2 * 24 * 60 * 60 * 1000)
+    }).then(function(result) {
+      assert(result.items[0].views >= 0);
+    });
+  });
+
+  it('Returns aggregated pageviews for all projects (plural) and a particular project (date object).',
+      function() {
+    return pageviews.getAggregatedPageviews({
+      projects: ['all-projects', 'en.wikipedia'],
+      start: new Date(new Date() - 3 * 24 * 60 * 60 * 1000),
+      end: new Date(new Date() - 2 * 24 * 60 * 60 * 1000)
+    }).then(function(result) {
+      assert(result[0].items[0].views >= 0 && result[1].items[0].views >= 0);
+    });
+  });
+
+  it('Returns aggregated pageviews for all projects (singular, date object).',
+      function() {
+    return pageviews.getAggregatedPageviews({
+      project: 'all-projects',
+      start: new Date(new Date() - 3 * 24 * 60 * 60 * 1000),
+      end: new Date(new Date() - 2 * 24 * 60 * 60 * 1000)
+    }).then(function(result) {
+      assert(result.items[0].views >= 0);
+    });
+  });
+
   it('Returns the top pageviews for a single project (with textual date).',
       function() {
     return pageviews.getTopPageviews({
