@@ -57,6 +57,18 @@ describe('pageviews.js', function() {
     });
   });
 
+  it('Returns pageviews for a single article (date object, no padding).', function() {
+    return pageviews.getPerArticlePageviews({
+      article: 'Berlin',
+      project: 'en.wikipedia',
+      start: new Date('2015-12-10'),
+      end: new Date('2015-12-20')
+    }).then(function(result) {
+      assert.isNumber(result.items[0].views);
+      assert.equal(result.items[0].timestamp, '2015121000');
+    });
+  });
+
   it('Returns pageviews for multiple articles (date string).', function() {
     return pageviews.getPerArticlePageviews({
       articles: ['Berlin', 'Hamburg'],
@@ -98,6 +110,19 @@ describe('pageviews.js', function() {
       end: new Date(new Date() - 2 * 24 * 60 * 60 * 1000)
     }).then(function(result) {
       assert(result.items[0].views >= 0 && result.items[1].views >= 0);
+    });
+  });
+
+  it('Returns aggregated pageviews for a single project (date object, no padding).',
+      function() {
+    return pageviews.getAggregatedPageviews({
+      project: 'en.wikipedia',
+      start: new Date('2015-12-10'),
+      end: new Date('2015-12-20'),
+      granularity: 'daily'
+    }).then(function(result) {
+      assert(result.items[0].views >= 0 && result.items[1].views >= 0);
+      assert.equal(result.items[0].timestamp, '2015121000');
     });
   });
 
