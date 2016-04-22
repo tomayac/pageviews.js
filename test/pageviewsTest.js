@@ -57,7 +57,8 @@ describe('pageviews.js', function() {
     });
   });
 
-  it('Returns pageviews for a single article (date object, no padding).', function() {
+  it('Returns pageviews for a single article (date object, no padding).',
+      function() {
     return pageviews.getPerArticlePageviews({
       article: 'Berlin',
       project: 'en.wikipedia',
@@ -113,8 +114,8 @@ describe('pageviews.js', function() {
     });
   });
 
-  it('Returns aggregated pageviews for a single project (date object, no padding).',
-      function() {
+  it('Returns aggregated pageviews for a single project ' +
+      '(date object, no padding).', function() {
     return pageviews.getAggregatedPageviews({
       project: 'en.wikipedia',
       start: new Date('2015-12-10'),
@@ -159,8 +160,8 @@ describe('pageviews.js', function() {
     });
   });
 
-  it('Returns aggregated pageviews for all projects (plural) and a particular project (date object).',
-      function() {
+  it('Returns aggregated pageviews for all projects (plural) ' +
+      'and a particular project (date object).', function() {
     return pageviews.getAggregatedPageviews({
       projects: ['all-projects', 'en.wikipedia'],
       start: new Date(new Date() - 3 * 24 * 60 * 60 * 1000),

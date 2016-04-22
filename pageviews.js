@@ -122,8 +122,9 @@ var pageviews = (function() {
         return new Error('Required parameter "start" missing.');
       }
       params.start = typeof params.start === 'object' ?
-          (params.start.getUTCFullYear() + (pad(params.start.getUTCMonth() + 1)) +
-              pad(params.start.getUTCDate())) :
+          (params.start.getUTCFullYear() +
+          (pad(params.start.getUTCMonth() + 1)) +
+          (pad(params.start.getUTCDate()))) :
           params.start;
       if (!/^(?:19|20)\d\d[- /.]?(?:0[1-9]|1[012])[- /.]?(?:0[1-9]|[12][0-9]|3[01])$/.test(params.start)) {
         return new Error('Required parameter "start" invalid.');
@@ -145,8 +146,9 @@ var pageviews = (function() {
         return new Error('Required parameter "end" missing.');
       }
       params.start = typeof params.start === 'object' ?
-          (params.start.getUTCFullYear() + (pad(params.start.getUTCMonth() + 1)) +
-              pad(params.start.getUTCDate()) + pad(params.start.getUTCHours())) :
+          (params.start.getUTCFullYear() +
+          (pad(params.start.getUTCMonth() + 1)) +
+          (pad(params.start.getUTCDate()) + pad(params.start.getUTCHours()))) :
           params.start;
       if (!/^(?:19|20)\d\d[- /.]?(?:0[1-9]|1[012])[- /.]?(?:0[1-9]|[12][0-9]|3[01])[- /.]?(?:[012][0-9])$/.test(params.start)) {
         return new Error('Required parameter "start" missing or invalid.');
@@ -184,7 +186,8 @@ var pageviews = (function() {
         return new Error('Required parameter "month" missing or invalid.');
       }
       // Required: day
-      if ((!params.day) || (!/^(?:0?[1-9]|[12][0-9]|3[01])$/.test(params.day))) {
+      if ((!params.day) ||
+          (!/^(?:0?[1-9]|[12][0-9]|3[01])$/.test(params.day))) {
         return new Error('Required parameter "day" missing or invalid.');
       }
       if ((params.limit) && !/^\d+$/.test(params.limit) &&
