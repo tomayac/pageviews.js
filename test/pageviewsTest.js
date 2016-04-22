@@ -46,6 +46,17 @@ describe('pageviews.js', function() {
     });
   });
 
+  it('Returns pageviews for a single article (wikidata).', function() {
+    return pageviews.getPerArticlePageviews({
+      article: 'Q42',
+      project: 'wikidata',
+      start: '20151201',
+      end: '20151202'
+    }).then(function(result) {
+      assert.isNumber(result.items[0].views);
+    });
+  });
+
   it('Returns pageviews for a single article (date object).', function() {
     return pageviews.getPerArticlePageviews({
       article: 'Berlin',

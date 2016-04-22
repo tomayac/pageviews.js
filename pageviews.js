@@ -89,6 +89,7 @@ var pageviews = (function() {
     }
     if (params.project) {
       if ((params.project !== 'all-projects') &&
+          (params.project !== 'wikidata') &&
           (params.project.indexOf('.') === -1)) {
         return new Error('Required parameter "project" invalid.');
       }
@@ -98,7 +99,9 @@ var pageviews = (function() {
       if (params.projects && params.projects != 'all-projects') {
         if ((!Array.isArray(params.projects)) || (!params.projects.length) ||
             (params.projects.filter(function(project) {
-              return project.indexOf('.') === -1 && project !== 'all-projects';
+              return project.indexOf('.') === -1 &&
+                  project !== 'all-projects' &&
+                  project !== 'wikidata';
             }).length)
         ) {
           return new Error('Required parameter "projects" invalid.');

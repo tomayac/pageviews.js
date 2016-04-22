@@ -1,7 +1,7 @@
 {
   "name": "pageviews",
   "main": "pageviews",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "homepage": "https://github.com/tomayac/pageviews.js",
   "authors": [
     "@tomayac"
