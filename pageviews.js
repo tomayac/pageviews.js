@@ -73,7 +73,7 @@ var pageviews = (function() {
   var _checkParams = function(params, caller) {
 
     var pad = function(d) {
-      return d < 10 ? '0' + d : d;
+      return d < 10 ? '0' + d : d.toString();
     };
 
     if (!params) {
@@ -122,8 +122,8 @@ var pageviews = (function() {
         return new Error('Required parameter "start" missing.');
       }
       params.start = typeof params.start === 'object' ?
-          (params.start.getFullYear() + (pad(params.start.getMonth() + 1)) +
-              pad(params.start.getDate())) :
+          (params.start.getUTCFullYear() + (pad(params.start.getUTCMonth() + 1)) +
+              pad(params.start.getUTCDate())) :
           params.start;
       if (!/^(?:19|20)\d\d[- /.]?(?:0[1-9]|1[012])[- /.]?(?:0[1-9]|[12][0-9]|3[01])$/.test(params.start)) {
         return new Error('Required parameter "start" invalid.');
@@ -133,8 +133,8 @@ var pageviews = (function() {
         return new Error('Required parameter "end" missing.');
       }
       params.end = typeof params.end === 'object' ?
-          (params.end.getFullYear() + (pad(params.end.getMonth() + 1)) +
-              pad(params.end.getDate())) :
+          (params.end.getUTCFullYear() + (pad(params.end.getUTCMonth() + 1)) +
+              pad(params.end.getUTCDate())) :
           params.end;
       if (!/^(19|20)\d\d[- /.]?(0[1-9]|1[012])[- /.]?(0[1-9]|[12][0-9]|3[01])$/.test(params.end)) {
         return new Error('Required parameter "end" invalid.');
@@ -145,8 +145,8 @@ var pageviews = (function() {
         return new Error('Required parameter "end" missing.');
       }
       params.start = typeof params.start === 'object' ?
-          (params.start.getFullYear() + (pad(params.start.getMonth() + 1)) +
-              pad(params.start.getDate()) + pad(params.start.getHours())) :
+          (params.start.getUTCFullYear() + (pad(params.start.getUTCMonth() + 1)) +
+              pad(params.start.getUTCDate()) + pad(params.start.getUTCHours())) :
           params.start;
       if (!/^(?:19|20)\d\d[- /.]?(?:0[1-9]|1[012])[- /.]?(?:0[1-9]|[12][0-9]|3[01])[- /.]?(?:[012][0-9])$/.test(params.start)) {
         return new Error('Required parameter "start" missing or invalid.');
@@ -156,8 +156,8 @@ var pageviews = (function() {
         return new Error('Required parameter "end" missing.');
       }
       params.end = typeof params.end === 'object' ?
-          (params.end.getFullYear() + (pad(params.end.getMonth() + 1)) +
-              pad(params.end.getDate()) + pad(params.end.getHours())) :
+          (params.end.getUTCFullYear() + (pad(params.end.getUTCMonth() + 1)) +
+              pad(params.end.getUTCDate()) + pad(params.end.getUTCHours())) :
           params.end;
       if (!/^(19|20)\d\d[- /.]?(0[1-9]|1[012])[- /.]?(0[1-9]|[12][0-9]|3[01])[- /.]?(?:[012][0-9])$/.test(params.end)) {
         return new Error('Required parameter "end" missing or invalid.');
@@ -171,9 +171,9 @@ var pageviews = (function() {
                 params.date.substr(0, 4) + '-' +
                 params.date.substr(4, 2) + '-' +
                 params.date.substr(6, 2));
-        params.year = params.date.getFullYear();
-        params.month = pad(params.date.getMonth() + 1);
-        params.day = pad(params.date.getDate());
+        params.year = params.date.getUTCFullYear();
+        params.month = pad(params.date.getUTCMonth() + 1);
+        params.day = pad(params.date.getUTCDate());
       }
       // Required: year
       if ((!params.year) || (!/^(?:19|20)\d\d$/.test(params.year))) {
