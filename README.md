@@ -171,6 +171,10 @@ getAggregatedPageviews
 getTopPageviews
 ```
 
+# Contributors
+- [@nuria](https://github.com/nuria)
+- [@marcelrf](https://github.com/marcelrf)
+
 # License
 Copyright 2016 Thomas Steiner (@tomayac)
 
