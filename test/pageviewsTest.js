@@ -20,7 +20,8 @@ describe('pageviews.js', function() {
         'getPageviewsDimensions',
         'getPerArticlePageviews',
         'getAggregatedPageviews',
-        'getTopPageviews']);
+        'getTopPageviews',
+        'getUniqueDevices']);
   });
 
   it('Supports the correct dimensions.', function() {
@@ -222,7 +223,7 @@ describe('pageviews.js', function() {
 
   it('Returns the top pageviews for a single project (with integer date).',
       function() {
-    pageviews.getTopPageviews({
+    return pageviews.getTopPageviews({
       project: 'en.wikipedia',
       year: 2015,
       month: 12,
@@ -235,12 +236,64 @@ describe('pageviews.js', function() {
 
   it('Returns the top pageviews for a single project (with date object).',
       function() {
-    pageviews.getTopPageviews({
+    return pageviews.getTopPageviews({
       project: 'en.wikipedia',
       date: new Date(new Date() - 3 * 24 * 60 * 60 * 1000),
       limit: 2
     }).then(function(result) {
       assert(result.items[0].articles.length > 0);
+    });
+  });
+
+  it('Returns the unique devices for a project (date object).', function() {
+    return pageviews.getUniqueDevices({
+      project: 'en.wikipedia',
+      start: new Date('2016-01-01'),
+      end: new Date('2016-01-02')
+    }).then(function(result) {
+      assert.equal(result.items.length, 2);
+      assert.isNotNull(result.items[0].devices);
+      assert.isNotNull(result.items[1].devices);
+      assert.equal(result.items[0].timestamp, '20160101');
+      assert.equal(result.items[1].timestamp, '20160102');
+    });
+  });
+
+  it('Returns the unique devices for a project (textual date).', function() {
+    return pageviews.getUniqueDevices({
+      project: 'en.wikipedia',
+      start: '20160101',
+      end: '20160102'
+    }).then(function(result) {
+      assert.equal(result.items.length, 2);
+      assert.isNotNull(result.items[0].devices);
+      assert.isNotNull(result.items[1].devices);
+      assert.equal(result.items[0].timestamp, '20160101');
+      assert.equal(result.items[1].timestamp, '20160102');
+    });
+  });
+
+  it('Returns the unique devices for a project (given accessSite).',
+      function() {
+    return pageviews.getUniqueDevices({
+      project: 'en.wikipedia',
+      start: '20160101',
+      end: '20160102',
+      accessSite: 'desktop-site'
+    }).then(function(result) {
+      assert.isNotNull(result.items[0].devices);
+    });
+  });
+
+  it('Returns the unique devices for a project (given granularity).',
+      function() {
+    return pageviews.getUniqueDevices({
+      project: 'en.wikipedia',
+      start: '20160101',
+      end: '20160131',
+      granularity: 'monthly'
+    }).then(function(result) {
+      assert.isNotNull(result.items[0].devices);
     });
   });
 });

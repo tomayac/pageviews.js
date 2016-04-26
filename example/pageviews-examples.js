@@ -96,3 +96,25 @@ pageviews.getTopPageviews({
 }).catch(function(error) {
   console.log(error);
 });
+
+pageviews.getUniqueDevices({
+  project: 'en.wikipedia',
+  start: '20160301',
+  end: '20160301',
+  accessSite: 'desktop-site'
+}).then(function(result) {
+  console.log(JSON.stringify(result, null, 2));
+}).catch(function(error) {
+  console.log(error);
+});
+
+pageviews.getUniqueDevices({
+  project: 'en.wikipedia',
+  start: '20160301',
+  end: '20160331',
+  granularity: 'monthly'
+}).then(function(result) {
+  console.log(JSON.stringify(result, null, 2));
+}).catch(function(error) {
+  console.log(error);
+});
