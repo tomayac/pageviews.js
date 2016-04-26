@@ -52,6 +52,11 @@ var pageviews = (function() {
     allowed: ['all-access', 'desktop', 'mobile-web', 'mobile-app']
   };
 
+  var _accessSite = {
+    default: 'all-sites',
+    allowed: ['all-sites', 'desktop-site', 'mobile-site']
+  };
+
   var _agent = {
     default: 'all-agents',
     allowed: ['all-agents', 'user', 'spider', 'bot']
@@ -65,6 +70,11 @@ var pageviews = (function() {
   var _granularityPerArticle = {
     default: 'daily',
     allowed: ['daily']
+  };
+
+  var _granularityUniques = {
+    default: 'daily',
+    allowed: ['daily', 'monthly']
   };
 
   /**
@@ -119,7 +129,7 @@ var pageviews = (function() {
         }
       }
     }
-    if (caller === 'getPerArticlePageviews') {
+    if (caller === 'getPerArticlePageviews' || caller === 'getUniqueDevices') {
       // Required: start
       if (!params.start) {
         return new Error('Required parameter "start" missing.');
@@ -146,7 +156,7 @@ var pageviews = (function() {
     } else if (caller === 'getAggregatedPageviews') {
       // Required: start
       if (!params.start) {
-        return new Error('Required parameter "end" missing.');
+        return new Error('Required parameter "start" missing.');
       }
       params.start = typeof params.start === 'object' ?
           (params.start.getUTCFullYear() +
@@ -202,6 +212,11 @@ var pageviews = (function() {
     if ((params.access) && (_access.allowed.indexOf(params.access) === -1)) {
       return new Error('Invalid optional parameter "access".');
     }
+    // Optional: accessSite
+    if ((params.accessSite) &&
+        (_accessSite.allowed.indexOf(params.accessSite) === -1)) {
+      return new Error('Invalid optional parameter "accessSite".');
+    }
     // Optional: agent
     if ((params.agent) && (_agent.allowed.indexOf(params.agent) === -1)) {
       return new Error('Invalid optional parameter "agent".');
@@ -214,6 +229,10 @@ var pageviews = (function() {
         }
       } else if (caller === 'getPerArticlePageviews') {
         if (_granularityPerArticle.allowed.indexOf(params.granularity) === -1) {
+          return new Error('Invalid optional parameter "granularity".');
+        }
+      } else if (caller === 'getUniqueDevices') {
+        if (_granularityUniques.allowed.indexOf(params.granularity) === -1) {
           return new Error('Invalid optional parameter "granularity".');
         }
       }
@@ -421,6 +440,42 @@ var pageviews = (function() {
     });
   };
 
+  var _getUniqueDevices = function(params) {
+    return new Promise(function(resolve, reject) {
+      params = _checkParams(params, 'getUniqueDevices');
+      if (params.stack) {
+        return reject(params);
+      }
+      // Required params
+      var project = params.project;
+      var start = params.start;
+      var end = params.end;
+      // Optional params
+      var accessSite = params.accessSite ?
+          params.accessSite : _accessSite.default;
+      var granularity = params.granularity ?
+          params.granularity : _granularityUniques.default;
+      var options = {
+        url: BASE_URL + '/metrics/unique-devices' +
+            '/' + project +
+            '/' + accessSite +
+            '/' + granularity +
+            '/' + start +
+            '/' + end,
+        headers: {
+          'User-Agent': USER_AGENT
+        }
+      };
+      request(options, function(error, response, body) {
+        var result = _checkResult(error, response, body);
+        if (result.stack) {
+          return reject(result);
+        }
+        return resolve(result);
+      });
+    });
+  };
+
   return {
     /**
      * This is the root of all pageview data endpoints. The list of paths that
@@ -448,7 +503,14 @@ var pageviews = (function() {
      * Lists the 1000 most viewed articles for a given project and timespan
      * (year, month or day). You can filter by access method.
      */
-    getTopPageviews: _getTopPageviews
+    getTopPageviews: _getTopPageviews,
+
+    /**
+     * Given a project and a date range, returns a timeseries of unique devices
+     * counts. You can filter by access site and choose between daily and
+     * monthly granularity.
+     */
+    getUniqueDevices: _getUniqueDevices
   };
 })();
 

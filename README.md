@@ -106,6 +106,18 @@ pageviews.getTopPageviews({
 }).catch(function(error) {
   console.log(error);
 });
+
+// Getting unique devices
+pageviews.getUniqueDevices({
+  project: 'en.wikipedia',
+  start: '20160301',
+  end: '20160301',
+  accessSite: 'desktop-site'
+}).then(function(result) {
+  console.log(JSON.stringify(result, null, 2));
+}).catch(function(error) {
+  console.log(error);
+});
 ```
 
 # Usage in the browser
@@ -139,7 +151,7 @@ You can then use the file in the browser as follows.
 
 # API
 
-The API is modeled along the [Wikimedia Pageviews API](https://wikimedia.org/api/rest_v1/?doc#!/Pageviews_data)
+The API is modeled along the [Wikimedia Pageviews API](https://wikimedia.org/api/rest_v1/?doc#!/Pageviews_data) and the [Wikimedia Unique Devices API](https://wikimedia.org/api/rest_v1/?doc#!/Unique_devices_data)
 and offers the following methods:
 ```
 /**
@@ -169,6 +181,13 @@ getAggregatedPageviews
  * (year, month or day). You can filter by access method.
  */
 getTopPageviews
+
+/**
+ * Given a project and a date range, returns a timeseries of unique devices
+ * counts. You can filter by access site and choose between daily and
+ * monthly granularity.
+ */
+getUniqueDevices
 ```
 
 # Contributors
