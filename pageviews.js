@@ -26,7 +26,7 @@ if (environment === 'node') {
   request = require('request');
   var packageJson = require('./package.json');
   // The user agent to use
-  USER_AGENT = 'pageviews.js–v' + packageJson.version + ' (' +
+  USER_AGENT = 'pageviews.js-v' + packageJson.version + ' (' +
       packageJson.repository.url + ')';
 } else {
   // Browser
