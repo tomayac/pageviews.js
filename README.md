@@ -195,7 +195,7 @@ getUniqueDevices
 - [@marcelrf](https://github.com/marcelrf)
 
 # License
-Copyright 2016 Thomas Steiner (@tomayac)
+Copyright 2017 Thomas Steiner (@tomayac)
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
