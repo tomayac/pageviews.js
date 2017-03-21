@@ -371,6 +371,59 @@ var pageviews = (function() {
     });
   };
 
+  var _getAggregatedLegacyPageviews = function(params) {
+    return new Promise(function(resolve, reject) {
+      params = _checkParams(params, 'getAggregatedLegacyPageviews');
+      if (params.stack) {
+        return reject(params);
+      }
+      if (params.projects === 'all-projects') {
+        params.projects = null;
+        params.project = 'all-projects';
+      }
+      // Call yourself recursively in case of multiple projects
+      if (params.projects) {
+        var promises = [];
+        params.projects.map(function(project, i) {
+          var newParams = params;
+          delete newParams.projects;
+          newParams.project = project;
+          promises[i] = _getAggregatedLegacyPageviews(newParams);
+        });
+        return resolve(Promise.all(promises));
+      }
+      // Required params
+      var project = params.project;
+      var start = params.start;
+      var end = params.end;
+      // Optional params
+      var access = params.access ? params.access : _access.default;
+      var agent = params.agent ? params.agent : _agent.default;
+      var granularity = params.granularity ?
+          params.granularity : _granularityAggregated.default;
+      var options = {
+        url: BASE_URL + '/metrics/legacy-pageviews/per-project' +
+            '/' + project +
+            '/' + access +
+            '/' + agent +
+            '/' + granularity +
+            '/' + start +
+            '/' + end,
+        headers: {
+          'User-Agent': USER_AGENT
+        }
+      };
+      options.url = 'http://localhost:5000/legacy.json';
+      request(options, function(error, response, body) {
+        var result = _checkResult(error, response, body);
+        if (result.stack) {
+          return reject(result);
+        }
+        return resolve(result);
+      });
+    });
+  };
+
   var _getTopPageviews = function(params) {
     return new Promise(function(resolve, reject) {
       params = _checkParams(params, 'getTopPageviews');
@@ -498,6 +551,11 @@ var pageviews = (function() {
      * between daily and hourly granularity as well.
      */
     getAggregatedPageviews: _getAggregatedPageviews,
+
+    /**
+     * TODO document
+     */
+    getAggregatedLegacyPageviews: _getAggregatedLegacyPageviews,
 
     /**
      * Lists the 1000 most viewed articles for a given project and timespan
