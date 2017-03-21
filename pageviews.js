@@ -405,7 +405,6 @@ var pageviews = (function() {
         url: BASE_URL + '/metrics/legacy-pageviews/per-project' +
             '/' + project +
             '/' + access +
-            '/' + agent +
             '/' + granularity +
             '/' + start +
             '/' + end,
