@@ -54,7 +54,7 @@ var pageviews = (function() {
 
   var _accessSite = {
     default: 'all-sites',
-    allowed: ['all-sites', 'desktop-site', 'mobile-site']
+    allowed: ['all-sites', 'desktop-site', 'mobile-site', 'all-access']
   };
 
   var _agent = {
