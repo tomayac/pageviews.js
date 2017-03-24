@@ -371,9 +371,9 @@ var pageviews = (function() {
     });
   };
 
-  var _getAggregatedLegacyPageviews = function(params) {
+  var _getAggregatedLegacyPagecounts = function(params) {
     return new Promise(function(resolve, reject) {
-      params = _checkParams(params, 'getAggregatedLegacyPageviews');
+      params = _checkParams(params, 'getAggregatedLegacyPagecounts');
       if (params.stack) {
         return reject(params);
       }
@@ -388,7 +388,7 @@ var pageviews = (function() {
           var newParams = params;
           delete newParams.projects;
           newParams.project = project;
-          promises[i] = _getAggregatedLegacyPageviews(newParams);
+          promises[i] = _getAggregatedLegacyPagecounts(newParams);
         });
         return resolve(Promise.all(promises));
       }
@@ -402,7 +402,7 @@ var pageviews = (function() {
       var granularity = params.granularity ?
           params.granularity : _granularityAggregated.default;
       var options = {
-        url: BASE_URL + '/metrics/legacy-pageviews/per-project' +
+        url: BASE_URL + '/metrics/legacy/pagecounts/per-project' +
             '/' + project +
             '/' + access +
             '/' + granularity +
@@ -552,9 +552,12 @@ var pageviews = (function() {
     getAggregatedPageviews: _getAggregatedPageviews,
 
     /**
-     * TODO document
+     * Given a date range between December 2007 and August 2016,
+     * returns a timeseries of pageview counts. You can filter by
+     * project and access method. You can choose between daily,
+     * hourly and monthly granularity as well.
      */
-    getAggregatedLegacyPageviews: _getAggregatedLegacyPageviews,
+    getAggregatedLegacyPagecounts: _getAggregatedLegacyPagecounts,
 
     /**
      * Lists the 1000 most viewed articles for a given project and timespan

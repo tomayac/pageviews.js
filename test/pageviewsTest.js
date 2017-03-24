@@ -20,7 +20,7 @@ describe('pageviews.js', function() {
         'getPageviewsDimensions',
         'getPerArticlePageviews',
         'getAggregatedPageviews',
-        'getAggregatedLegacyPageviews',
+        'getAggregatedLegacyPagecounts',
         'getTopPageviews',
         'getUniqueDevices']);
   });
@@ -195,9 +195,9 @@ describe('pageviews.js', function() {
     });
   });
 
-  it('Returns aggregated legacy pageviews for a single project (date string).',
+  it('Returns aggregated legacy pagecounts for a single project (date string).',
       function() {
-    return pageviews.getAggregatedLegacyPageviews({
+    return pageviews.getAggregatedLegacyPagecounts({
       project: 'en.wikipedia',
       start: '2008120101',
       end: '2008120102'
@@ -206,9 +206,9 @@ describe('pageviews.js', function() {
     });
   });
 
-  it('Returns aggregated legacy pageviews for a single project (date object).',
+  it('Returns aggregated legacy pagecounts for a single project (date object).',
       function() {
-    return pageviews.getAggregatedLegacyPageviews({
+    return pageviews.getAggregatedLegacyPagecounts({
       project: 'en.wikipedia',
       start: new Date(2008, 12, 1, 1),
       end: new Date(2008, 12, 1, 2)
@@ -217,9 +217,9 @@ describe('pageviews.js', function() {
     });
   });
 
-  it('Returns aggregated legacy pageviews for a single project ' +
+  it('Returns aggregated legacy pagecounts for a single project ' +
       '(date object, no padding).', function() {
-    return pageviews.getAggregatedLegacyPageviews({
+    return pageviews.getAggregatedLegacyPagecounts({
       project: 'en.wikipedia',
       start: new Date('2008-12-10'),
       end: new Date('2008-12-20'),
@@ -230,9 +230,9 @@ describe('pageviews.js', function() {
     });
   });
 
-  it('Returns aggregated legacy pageviews for multiple projects (date string).',
+  it('Returns aggregated legacy pagecounts for multiple projects (date string).',
       function() {
-    return pageviews.getAggregatedLegacyPageviews({
+    return pageviews.getAggregatedLegacyPagecounts({
       projects: ['en.wikipedia', 'de.wikipedia'],
       start: '2008120101',
       end: '2008120101'
@@ -241,9 +241,9 @@ describe('pageviews.js', function() {
     });
   });
 
-  it('Returns aggregated legacy pageviews for multiple projects (date object).',
+  it('Returns aggregated legacy pagecounts for multiple projects (date object).',
       function() {
-    return pageviews.getAggregatedLegacyPageviews({
+    return pageviews.getAggregatedLegacyPagecounts({
       projects: ['en.wikipedia', 'de.wikipedia'],
       start: new Date(2008, 12, 1, 1),
       end: new Date(2008, 12, 1, 2)
@@ -252,9 +252,9 @@ describe('pageviews.js', function() {
     });
   });
 
-  it('Returns aggregated legacy pageviews for all projects (plural, date object).',
+  it('Returns aggregated legacy pagecounts for all projects (plural, date object).',
       function() {
-    return pageviews.getAggregatedLegacyPageviews({
+    return pageviews.getAggregatedLegacyPagecounts({
       projects: 'all-projects',
       start: new Date(2008, 12, 1, 1),
       end: new Date(2008, 12, 1, 2)
@@ -263,9 +263,9 @@ describe('pageviews.js', function() {
     });
   });
 
-  it('Returns aggregated legacy pageviews for all projects (plural) ' +
+  it('Returns aggregated legacy pagecounts for all projects (plural) ' +
       'and a particular project (date object).', function() {
-    return pageviews.getAggregatedLegacyPageviews({
+    return pageviews.getAggregatedLegacyPagecounts({
       projects: ['all-projects', 'en.wikipedia'],
       start: new Date(2008, 12, 1, 1),
       end: new Date(2008, 12, 1, 2)
@@ -274,9 +274,9 @@ describe('pageviews.js', function() {
     });
   });
 
-  it('Returns aggregated legacy pageviews for all projects (singular, date object).',
+  it('Returns aggregated legacy pagecounts for all projects (singular, date object).',
       function() {
-    return pageviews.getAggregatedLegacyPageviews({
+    return pageviews.getAggregatedLegacyPagecounts({
       project: 'all-projects',
       start: new Date(2008, 12, 1, 1),
       end: new Date(2008, 12, 1, 2)
