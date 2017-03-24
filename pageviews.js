@@ -412,7 +412,6 @@ var pageviews = (function() {
           'User-Agent': USER_AGENT
         }
       };
-      options.url = 'http://localhost:5000/legacy.json';
       request(options, function(error, response, body) {
         var result = _checkResult(error, response, body);
         if (result.stack) {
