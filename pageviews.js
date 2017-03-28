@@ -91,7 +91,9 @@ var pageviews = (function() {
     }
     // Required: project or projects
     if ((!params.project) && (!params.projects)) {
-      if (caller === 'getAggregatedPageviews' || caller === 'getTopPageviews') {
+      if ((caller === 'getAggregatedPageviews') ||
+          (caller === 'getTopPageviews') ||
+          (caller === 'getAggregatedLegacyPagecounts')) {
         return new Error('Required parameter "project" or "projects" missing.');
       } else {
         return new Error('Required parameter "project" missing.');
@@ -105,6 +107,7 @@ var pageviews = (function() {
       }
     }
     if ((caller === 'getAggregatedPageviews') ||
+        (caller === 'getAggregatedLegacyPagecounts') ||
         (caller === 'getTopPageviews')) {
       if (params.projects && params.projects != 'all-projects') {
         if ((!Array.isArray(params.projects)) || (!params.projects.length) ||
@@ -153,7 +156,8 @@ var pageviews = (function() {
       if (!/^(19|20)\d\d[- /.]?(0[1-9]|1[012])[- /.]?(0[1-9]|[12][0-9]|3[01])$/.test(params.end)) {
         return new Error('Required parameter "end" invalid.');
       }
-    } else if (caller === 'getAggregatedPageviews') {
+    } else if ((caller === 'getAggregatedPageviews') ||
+               (caller === 'getAggregatedLegacyPagecounts')) {
       // Required: start
       if (!params.start) {
         return new Error('Required parameter "start" missing.');
@@ -223,7 +227,8 @@ var pageviews = (function() {
     }
     // Optional: granularity
     if (params.granularity) {
-      if (caller === 'getAggregatedPageviews') {
+      if ((caller === 'getAggregatedPageviews') ||
+          (caller === 'getAggregatedLegacyPagecounts')) {
         if (_granularityAggregated.allowed.indexOf(params.granularity) === -1) {
           return new Error('Invalid optional parameter "granularity".');
         }
@@ -253,7 +258,7 @@ var pageviews = (function() {
       if (response.statusCode === 404) {
         try {
           data = JSON.parse(body);
-          return new Error(data.detail);
+          return new Error(data.detail || data.title);
         } catch (e) {
           return new Error(e);
         }
@@ -397,14 +402,14 @@ var pageviews = (function() {
       var start = params.start;
       var end = params.end;
       // Optional params
-      var access = params.access ? params.access : _access.default;
-      var agent = params.agent ? params.agent : _agent.default;
+      var accessSite = params.accessSite ?
+          params.accessSite : _accessSite.default;
       var granularity = params.granularity ?
           params.granularity : _granularityAggregated.default;
       var options = {
-        url: BASE_URL + '/metrics/legacy/pagecounts/per-project' +
+        url: BASE_URL + '/metrics/legacy/pagecounts/aggregate' +
             '/' + project +
-            '/' + access +
+            '/' + accessSite +
             '/' + granularity +
             '/' + start +
             '/' + end,

@@ -202,7 +202,7 @@ describe('pageviews.js', function() {
       start: '2008120101',
       end: '2008120102'
     }).then(function(result) {
-      assert(result.items[0].views >= 0 && result.items[1].views >= 0);
+      assert(result.items[0].count >= 0 && result.items[1].count >= 0);
     });
   });
 
@@ -213,7 +213,7 @@ describe('pageviews.js', function() {
       start: new Date(2008, 12, 1, 1),
       end: new Date(2008, 12, 1, 2)
     }).then(function(result) {
-      assert(result.items[0].views >= 0 && result.items[1].views >= 0);
+      assert(result.items[0].count >= 0 && result.items[1].count >= 0);
     });
   });
 
@@ -225,41 +225,41 @@ describe('pageviews.js', function() {
       end: new Date('2008-12-20'),
       granularity: 'daily'
     }).then(function(result) {
-      assert(result.items[0].views >= 0 && result.items[1].views >= 0);
+      assert(result.items[0].count >= 0 && result.items[1].count >= 0);
       assert.equal(result.items[0].timestamp, '2008121000');
     });
   });
 
-  it('Returns aggregated legacy pagecounts for multiple projects (date string).',
-      function() {
+  it('Returns aggregated legacy pagecounts for multiple projects (date ' +
+      'string).', function() {
     return pageviews.getAggregatedLegacyPagecounts({
       projects: ['en.wikipedia', 'de.wikipedia'],
       start: '2008120101',
       end: '2008120101'
     }).then(function(result) {
-      assert(result[0].items[0].views >= 0 && result[1].items[0].views >= 0);
+      assert(result[0].items[0].count >= 0 && result[1].items[0].count >= 0);
     });
   });
 
-  it('Returns aggregated legacy pagecounts for multiple projects (date object).',
-      function() {
+  it('Returns aggregated legacy pagecounts for multiple projects (date ' +
+      'object).', function() {
     return pageviews.getAggregatedLegacyPagecounts({
       projects: ['en.wikipedia', 'de.wikipedia'],
       start: new Date(2008, 12, 1, 1),
       end: new Date(2008, 12, 1, 2)
     }).then(function(result) {
-      assert(result[0].items[0].views >= 0 && result[1].items[0].views >= 0);
+      assert(result[0].items[0].count >= 0 && result[1].items[0].count >= 0);
     });
   });
 
-  it('Returns aggregated legacy pagecounts for all projects (plural, date object).',
-      function() {
+  it('Returns aggregated legacy pagecounts for all projects (plural, date ' +
+      'object).', function() {
     return pageviews.getAggregatedLegacyPagecounts({
       projects: 'all-projects',
       start: new Date(2008, 12, 1, 1),
       end: new Date(2008, 12, 1, 2)
     }).then(function(result) {
-      assert(result.items[0].views >= 0);
+      assert(result.items[0].count >= 0);
     });
   });
 
@@ -270,18 +270,18 @@ describe('pageviews.js', function() {
       start: new Date(2008, 12, 1, 1),
       end: new Date(2008, 12, 1, 2)
     }).then(function(result) {
-      assert(result[0].items[0].views >= 0 && result[1].items[0].views >= 0);
+      assert(result[0].items[0].count >= 0 && result[1].items[0].count >= 0);
     });
   });
 
-  it('Returns aggregated legacy pagecounts for all projects (singular, date object).',
-      function() {
+  it('Returns aggregated legacy pagecounts for all projects (singular, date ' +
+      'object).', function() {
     return pageviews.getAggregatedLegacyPagecounts({
       project: 'all-projects',
       start: new Date(2008, 12, 1, 1),
       end: new Date(2008, 12, 1, 2)
     }).then(function(result) {
-      assert(result.items[0].views >= 0);
+      assert(result.items[0].count >= 0);
     });
   });
 
