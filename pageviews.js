@@ -54,7 +54,7 @@ var pageviews = (function() {
 
   var _accessSite = {
     default: 'all-sites',
-    allowed: ['all-sites', 'desktop-site', 'mobile-site']
+    allowed: ['all-sites', 'desktop-site', 'mobile-site', 'all-access']
   };
 
   var _agent = {
@@ -91,7 +91,9 @@ var pageviews = (function() {
     }
     // Required: project or projects
     if ((!params.project) && (!params.projects)) {
-      if (caller === 'getAggregatedPageviews' || caller === 'getTopPageviews') {
+      if ((caller === 'getAggregatedPageviews') ||
+          (caller === 'getTopPageviews') ||
+          (caller === 'getAggregatedLegacyPagecounts')) {
         return new Error('Required parameter "project" or "projects" missing.');
       } else {
         return new Error('Required parameter "project" missing.');
@@ -105,6 +107,7 @@ var pageviews = (function() {
       }
     }
     if ((caller === 'getAggregatedPageviews') ||
+        (caller === 'getAggregatedLegacyPagecounts') ||
         (caller === 'getTopPageviews')) {
       if (params.projects && params.projects != 'all-projects') {
         if ((!Array.isArray(params.projects)) || (!params.projects.length) ||
@@ -153,7 +156,8 @@ var pageviews = (function() {
       if (!/^(19|20)\d\d[- /.]?(0[1-9]|1[012])[- /.]?(0[1-9]|[12][0-9]|3[01])$/.test(params.end)) {
         return new Error('Required parameter "end" invalid.');
       }
-    } else if (caller === 'getAggregatedPageviews') {
+    } else if ((caller === 'getAggregatedPageviews') ||
+               (caller === 'getAggregatedLegacyPagecounts')) {
       // Required: start
       if (!params.start) {
         return new Error('Required parameter "start" missing.');
@@ -223,7 +227,8 @@ var pageviews = (function() {
     }
     // Optional: granularity
     if (params.granularity) {
-      if (caller === 'getAggregatedPageviews') {
+      if ((caller === 'getAggregatedPageviews') ||
+          (caller === 'getAggregatedLegacyPagecounts')) {
         if (_granularityAggregated.allowed.indexOf(params.granularity) === -1) {
           return new Error('Invalid optional parameter "granularity".');
         }
@@ -253,7 +258,7 @@ var pageviews = (function() {
       if (response.statusCode === 404) {
         try {
           data = JSON.parse(body);
-          return new Error(data.detail);
+          return new Error(data.detail || data.title);
         } catch (e) {
           return new Error(e);
         }
@@ -354,6 +359,57 @@ var pageviews = (function() {
             '/' + project +
             '/' + access +
             '/' + agent +
+            '/' + granularity +
+            '/' + start +
+            '/' + end,
+        headers: {
+          'User-Agent': USER_AGENT
+        }
+      };
+      request(options, function(error, response, body) {
+        var result = _checkResult(error, response, body);
+        if (result.stack) {
+          return reject(result);
+        }
+        return resolve(result);
+      });
+    });
+  };
+
+  var _getAggregatedLegacyPagecounts = function(params) {
+    return new Promise(function(resolve, reject) {
+      params = _checkParams(params, 'getAggregatedLegacyPagecounts');
+      if (params.stack) {
+        return reject(params);
+      }
+      if (params.projects === 'all-projects') {
+        params.projects = null;
+        params.project = 'all-projects';
+      }
+      // Call yourself recursively in case of multiple projects
+      if (params.projects) {
+        var promises = [];
+        params.projects.map(function(project, i) {
+          var newParams = params;
+          delete newParams.projects;
+          newParams.project = project;
+          promises[i] = _getAggregatedLegacyPagecounts(newParams);
+        });
+        return resolve(Promise.all(promises));
+      }
+      // Required params
+      var project = params.project;
+      var start = params.start;
+      var end = params.end;
+      // Optional params
+      var accessSite = params.accessSite ?
+          params.accessSite : _accessSite.default;
+      var granularity = params.granularity ?
+          params.granularity : _granularityAggregated.default;
+      var options = {
+        url: BASE_URL + '/metrics/legacy/pagecounts/aggregate' +
+            '/' + project +
+            '/' + accessSite +
             '/' + granularity +
             '/' + start +
             '/' + end,
@@ -498,6 +554,14 @@ var pageviews = (function() {
      * between daily and hourly granularity as well.
      */
     getAggregatedPageviews: _getAggregatedPageviews,
+
+    /**
+     * Given a date range between December 2007 and August 2016,
+     * returns a timeseries of pageview counts. You can filter by
+     * project and access method. You can choose between daily,
+     * hourly and monthly granularity as well.
+     */
+    getAggregatedLegacyPagecounts: _getAggregatedLegacyPagecounts,
 
     /**
      * Lists the 1000 most viewed articles for a given project and timespan
