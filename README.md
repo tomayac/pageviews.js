@@ -118,6 +118,17 @@ pageviews.getUniqueDevices({
 }).catch(function(error) {
   console.log(error);
 });
+
+// Getting legacy pagecounts
+pageviews.getAggregatedLegacyPagecounts({
+  project: 'en.wikipedia',
+  start: new Date(2008, 12, 1, 1),
+  end: new Date(2008, 12, 1, 2)
+}).then(function(result) {
+  console.log(JSON.stringify(result, null, 2));
+}).catch(function(error) {
+  console.log(error);
+});
 ```
 
 # Usage in the browser
@@ -183,6 +194,14 @@ getAggregatedPageviews
 getTopPageviews
 
 /**
+ * Given a date range between December 2007 and August 2016,
+ * returns a timeseries of pageview counts. You can filter by
+ * project and access method. You can choose between daily,
+ * hourly and monthly granularity as well.
+ */
+ getAggregatedLegacyPagecounts
+
+/**
  * Given a project and a date range, returns a timeseries of unique devices
  * counts. You can filter by access site and choose between daily and
  * monthly granularity.
@@ -193,6 +212,7 @@ getUniqueDevices
 # Contributors
 - [@nuria](https://github.com/nuria)
 - [@marcelrf](https://github.com/marcelrf)
+- [@fdansv](https://github.com/fdansv)
 
 # License
 Copyright 2017 Thomas Steiner (@tomayac)
