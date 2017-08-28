@@ -1,5 +1,7 @@
 # pageviews.js
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/tomayac/pageviews.js.svg)](https://greenkeeper.io/)
+
 A lightweight JavaScript client library for the [Wikimedia Pageviews API](https://wikimedia.org/api/rest_v1/?doc#!/Pageviews_data) for Wikipedia and various of its sister projects for **Node.js** and the **browser**.
 
 # Installation
