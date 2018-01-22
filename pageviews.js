@@ -93,6 +93,7 @@ var pageviews = (function() {
     if ((!params.project) && (!params.projects)) {
       if ((caller === 'getAggregatedPageviews') ||
           (caller === 'getTopPageviews') ||
+          (caller === 'getTopPageviewsByCountry') ||
           (caller === 'getAggregatedLegacyPagecounts')) {
         return new Error('Required parameter "project" or "projects" missing.');
       } else {
@@ -108,8 +109,9 @@ var pageviews = (function() {
     }
     if ((caller === 'getAggregatedPageviews') ||
         (caller === 'getAggregatedLegacyPagecounts') ||
-        (caller === 'getTopPageviews')) {
-      if (params.projects && params.projects != 'all-projects') {
+        (caller === 'getTopPageviews') ||
+        (caller === 'getTopPageviewsByCountry')) {
+      if (params.projects && params.projects !== 'all-projects') {
         if ((!Array.isArray(params.projects)) || (!params.projects.length) ||
             (params.projects.filter(function(project) {
               return project.indexOf('.') === -1 &&
@@ -180,6 +182,20 @@ var pageviews = (function() {
           params.end;
       if (!/^(19|20)\d\d[- /.]?(0[1-9]|1[012])[- /.]?(0[1-9]|[12][0-9]|3[01])[- /.]?(?:[012][0-9])$/.test(params.end)) {
         return new Error('Required parameter "end" missing or invalid.');
+      }
+    }
+    if (caller === 'getTopPageviewsByCountry') {
+      // Required: year
+      if ((!params.year) || (!/^(?:19|20)\d\d$/.test(params.year))) {
+        return new Error('Required parameter "year" missing or invalid.');
+      }
+      // Required: month
+      if ((!params.month) || (!/^(?:0?[1-9]|1[012])$/.test(params.month))) {
+        return new Error('Required parameter "month" missing or invalid.');
+      }
+      // Optional: access
+      if ((params.access) && (_access.allowed.indexOf(params.access) === -1)) {
+        return new Error('Invalid optional parameter "access".');
       }
     }
     if (caller === 'getTopPageviews') {
@@ -451,8 +467,8 @@ var pageviews = (function() {
           '0' + params.month : params.month;
       var day = typeof params.day === 'number' && params.day < 10 ?
           '0' + params.day : params.day;
-      var limit = params.limit || false;
       // Optional params
+      var limit = params.limit || false;
       var access = params.access ? params.access : _access.default;
       var options = {
         url: BASE_URL + '/metrics/pageviews/top' +
@@ -472,6 +488,50 @@ var pageviews = (function() {
         }
         if (limit) {
           result.items[0].articles = result.items[0].articles.slice(0, limit);
+        }
+        return resolve(result);
+      });
+    });
+  };
+
+  var _getTopPageviewsByCountry = function(params) {
+    return new Promise(function(resolve, reject) {
+      params = _checkParams(params, 'getTopPageviewsByCountry');
+      if (params.stack) {
+        return reject(params);
+      }
+      // Call yourself recursively in case of multiple projects
+      if (params.projects) {
+        var promises = [];
+        params.projects.map(function(project, i) {
+          var newParams = params;
+          delete newParams.projects;
+          newParams.project = project;
+          promises[i] = _getTopPageviewsByCountry(newParams);
+        });
+        return resolve(Promise.all(promises));
+      }
+      // Required params
+      var project = params.project;
+      var year = params.year;
+      var month = typeof params.month === 'number' && params.month < 10 ?
+          '0' + params.month : params.month;
+      // Optional params
+      var access = params.access ? params.access : _access.default;
+      var options = {
+        url: BASE_URL + '/metrics/pageviews/top-by-country' +
+            '/' + project +
+            '/' + access +
+            '/' + year +
+            '/' + month,
+        headers: {
+          'User-Agent': USER_AGENT
+        }
+      };
+      request(options, function(error, response, body) {
+        var result = _checkResult(error, response, body);
+        if (result.stack) {
+          return reject(result);
         }
         return resolve(result);
       });
@@ -568,6 +628,14 @@ var pageviews = (function() {
      * (year, month or day). You can filter by access method.
      */
     getTopPageviews: _getTopPageviews,
+
+    /**
+     * Lists the pageviews to this project, split by country of origin for a
+     * given month. Because of privacy reasons, pageviews are given in a
+     * bucketed format, and countries with less than 100 views do not get
+     * reported.
+     */
+    getTopPageviewsByCountry: _getTopPageviewsByCountry,
 
     /**
      * Given a project and a date range, returns a timeseries of unique devices

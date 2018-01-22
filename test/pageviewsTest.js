@@ -22,6 +22,7 @@ describe('pageviews.js', function() {
         'getAggregatedPageviews',
         'getAggregatedLegacyPagecounts',
         'getTopPageviews',
+        'getTopPageviewsByCountry',
         'getUniqueDevices']);
   });
 
@@ -31,7 +32,8 @@ describe('pageviews.js', function() {
         items: [
           'aggregate',
           'per-article',
-          'top'
+          'top',
+          'top-by-country',
         ]
       });
     });
@@ -333,6 +335,43 @@ describe('pageviews.js', function() {
       limit: 2
     }).then(function(result) {
       assert(result.items[0].articles.length > 0);
+    });
+  });
+
+  it('Returns the top pageviews by country for a single project ' +
+      '(with textual date).', function() {
+    return pageviews.getTopPageviewsByCountry({
+      project: 'en.wikipedia',
+      year: '2015',
+      month: '12',
+      limit: 2
+    }).then(function(result) {
+      assert(result.items[0].countries.length > 0);
+    });
+  });
+
+  it('Returns the top pageviews by country for multiple projects ' +
+      '(with textual date).', function() {
+    return pageviews.getTopPageviewsByCountry({
+      projects: ['en.wikipedia', 'de.wikipedia'],
+      year: '2015',
+      month: '12',
+      limit: 2
+    }).then(function(result) {
+      assert(result[0].items[0].countries.length > 0 &&
+          result[1].items[0].countries.length > 0);
+    });
+  });
+
+  it('Returns the top pageviews by country for a single project ' +
+      '(with integer date).', function() {
+    return pageviews.getTopPageviewsByCountry({
+      project: 'en.wikipedia',
+      year: 2015,
+      month: 12,
+      limit: 2
+    }).then(function(result) {
+      assert(result.items[0].countries.length > 0);
     });
   });
 
