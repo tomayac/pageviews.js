@@ -12,12 +12,6 @@ With npm:
 $ npm install pageviews
 ```
 
-With bower:
-
-```bash
-$ bower install pageviews
-```
-
 # Usage in Node.js
 
 The client library requires native or polyfilled Promises support.
