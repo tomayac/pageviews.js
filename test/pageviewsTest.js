@@ -343,8 +343,7 @@ describe('pageviews.js', function() {
     return pageviews.getTopPageviewsByCountry({
       project: 'en.wikipedia',
       year: '2015',
-      month: '12',
-      limit: 2
+      month: '12'
     }).then(function(result) {
       assert(result.items[0].countries.length > 0);
     });
@@ -355,8 +354,7 @@ describe('pageviews.js', function() {
     return pageviews.getTopPageviewsByCountry({
       projects: ['en.wikipedia', 'de.wikipedia'],
       year: '2015',
-      month: '12',
-      limit: 2
+      month: '12'
     }).then(function(result) {
       assert(result[0].items[0].countries.length > 0 &&
           result[1].items[0].countries.length > 0);
@@ -368,8 +366,7 @@ describe('pageviews.js', function() {
     return pageviews.getTopPageviewsByCountry({
       project: 'en.wikipedia',
       year: 2015,
-      month: 12,
-      limit: 2
+      month: 12
     }).then(function(result) {
       assert(result.items[0].countries.length > 0);
     });
