@@ -220,7 +220,7 @@ var pageviews = (function() {
       }
       // Required: day
       if ((!params.day) ||
-          (!/^(?:0?[1-9]|[12][0-9]|3[01])$/.test(params.day))) {
+          (!/^(?:0?[1-9]|[12][0-9]|3[01]|all-days)$/.test(params.day))) {
         return new Error('Required parameter "day" missing or invalid.');
       }
       if ((params.limit) && !/^\d+$/.test(params.limit) &&
